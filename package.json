@@ -1,6 +1,6 @@
 {
   "name": "sdv",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "spectra-data extended for the visualizer",
   "keywords": [
     "spectra-data",
@@ -33,7 +33,7 @@
     "cheminfo-tools": "1.3.4"
   },
   "dependencies": {
-    "spectra-data":"^1.5.2",
+    "spectra-data": "^1.5.2",
     "extend": "3.0.0"
   }
 }
