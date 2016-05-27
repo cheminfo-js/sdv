@@ -11,12 +11,11 @@ exports.NMR2D = SD.NMR2D;
 exports.ACS = SD.ACS;
 exports.JAnalyzer = SD.JAnalyzer;
 
-var options1D = {type:"rect",line:0, labelColor:"red", strokeColor:"red", strokeWidth:"1px", fillColor:"green"};
+var options1D = {type:"rect",line:0, lineLabel:1, labelColor:"red", strokeColor:"red", strokeWidth:"1px", fillColor:"green"};
 var options2D = {type:"rect",labelColor:"red", strokeColor:"red", strokeWidth:"1px", fillColor:"green", width:"6px", height:"6px"};
 
 function annotations1D(signals, optionsG){
     var options = extend({}, options1D, optionsG);
-    const line = options.line;
     var annotations=[];
     for (var i=0; i<signals.length; i++) {
         var annotation={};
@@ -25,15 +24,15 @@ function annotations1D(signals, optionsG){
 
         annotation._highlight=prediction._highlight;
         annotation.type=options.type;
-        annotation.position=[{x:prediction.to, y:(line*15)+"px"},
-            {x:prediction.from, y:(line*15+10)+"px"}];
+        annotation.position=[{x:prediction.to, y:(options.line*15)+"px"},
+            {x:prediction.from, y:(options.line*15+10)+"px"}];
 
         annotation.label={
             text: Math.round(prediction.integral*10)/10.0,
             size: "11px",
             anchor: 'middle',
             color:options.labelColor,
-            position: {x: prediction.signal[0].delta, y:(line*15)+"px", dy: "5px"}
+            position: {x: prediction.signal[0].delta, y:((options.line+options.lineLabel)*15)+"px", dy: "5px"}
         };
 
         annotation.strokeColor=options.strokeColor;
