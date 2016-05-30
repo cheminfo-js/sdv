@@ -16,6 +16,7 @@ var options2D = {type:"rect",labelColor:"red", strokeColor:"red", strokeWidth:"1
 
 function annotations1D(signals, optionsG){
     var options = extend({}, options1D, optionsG);
+    
     var annotations=[];
     for (var i=0; i<signals.length; i++) {
         var annotation={};
