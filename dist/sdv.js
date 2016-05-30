@@ -64,7 +64,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	exports.NMR = SD.NMR;
 	exports.NMR2D = SD.NMR2D;
-	exports.ACS = SD.ACS;
+	exports.ACS = SD.ACS2;
 	exports.JAnalyzer = SD.JAnalyzer;
 
 	var options1D = {type:"rect",line:0, lineLabel:1, labelColor:"red", strokeColor:"red", strokeWidth:"1px", fillColor:"green"};
@@ -72,6 +72,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function annotations1D(signals, optionsG){
 	    var options = extend({}, options1D, optionsG);
+	    
 	    var annotations=[];
 	    for (var i=0; i<signals.length; i++) {
 	        var annotation={};
