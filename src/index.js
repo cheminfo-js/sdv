@@ -8,7 +8,7 @@ var SD = require('spectra-data');
 
 exports.NMR = SD.NMR;
 exports.NMR2D = SD.NMR2D;
-exports.ACS = SD.ACS;
+exports.ACS = SD.ACS2;
 exports.JAnalyzer = SD.JAnalyzer;
 
 var options1D = {type:"rect",line:0, lineLabel:1, labelColor:"red", strokeColor:"red", strokeWidth:"1px", fillColor:"green"};
