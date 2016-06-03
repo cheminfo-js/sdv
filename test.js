@@ -3,7 +3,6 @@
  */
 
 var SD = require("./src/index.js");
-console.log(SD.ACS);
 
 var FS = require('fs');
 
@@ -16,7 +15,7 @@ function createSpectraData1D(filename, label, data) {
 
 function createSpectraData2D(filename, label, data) {
     var spectrum = SD.NMR2D.fromJcamp(
-        FS.readFileSync(__dirname + filename).toString()
+        FS.readFileSync(__dirname + filename).toString(), {fasParse:false}
     );
     return spectrum;
 };
