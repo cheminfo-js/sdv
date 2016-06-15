@@ -36,7 +36,7 @@ function annotations1D(signals, optionsG){
                 {x:prediction.from, y:(options.line*height+3)+"px"}];
         }
 
-        if(!options.noLabel||!prediction.integral){
+        if(!options.noLabel&&prediction.integral){
             annotation.label={
                 text: prediction.integral.toFixed(options.toFixed),
                 size: "11px",
