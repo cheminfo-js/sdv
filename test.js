@@ -26,6 +26,7 @@ describe('Load a jcamp and create annotations', function () {
         var spectrum=createSpectraData1D("/1h.jdx");
         var peakPicking = spectrum.nmrPeakDetection({"nH":8, realTop:true, thresholdFactor:1,clean:true,compile:true, idPrefix:"1H",format:"new"});
         var annotations = SD.GUI.annotations1D((peakPicking));
+        //console.log(JSON.stringify(annotations));
         annotations.length.should.greaterThan(1);
         annotations[0].type.should.equal("rect");
     });
@@ -33,7 +34,7 @@ describe('Load a jcamp and create annotations', function () {
     it('ACS', function () {
         var spectrum=createSpectraData1D("/1h.jdx");
         var peakPicking = spectrum.nmrPeakDetection({"nH":8, realTop:true, thresholdFactor:1,clean:true,compile:true, idPrefix:"1H",format:"new"});
-        var acs = SD.ACS.toACS(peakPicking,{rangeForMultiplet:true, nucleus:spectrum.getNucleus(), observe:spectrum.observeFrequencyX()});
+        var acs = SD.formatter.toACS(peakPicking,{rangeForMultiplet:true, nucleus:spectrum.getNucleus(), observe:spectrum.observeFrequencyX()});
         acs.length.should.greaterThan(10);
     });
 
