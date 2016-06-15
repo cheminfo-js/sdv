@@ -92,14 +92,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	                {x:prediction.from, y:(options.line*height+3)+"px"}];
 	        }
 
-	        annotation.label={
-	            text: prediction.integral.toFixed(options.toFixed),
-	            size: "11px",
-	            anchor: 'middle',
-	            color:options.labelColor,
-	            position: {x:(annotation.position[0].x+annotation.position[1].x)/2,
-	                y:((options.line+options.lineLabel)*height)+"px", dy: "5px"}
-	        };
+	        if(!options.noLabel||!prediction.integral){
+	            annotation.label={
+	                text: prediction.integral.toFixed(options.toFixed),
+	                size: "11px",
+	                anchor: 'middle',
+	                color:options.labelColor,
+	                position: {x:(annotation.position[0].x+annotation.position[1].x)/2,
+	                    y:((options.line+options.lineLabel)*height)+"px", dy: "5px"}
+	            };
+	        }
+
 
 	        annotation.strokeColor=options.strokeColor;
 	        annotation.strokeWidth=options.strokeWidth;
