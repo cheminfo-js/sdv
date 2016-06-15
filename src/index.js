@@ -20,38 +20,41 @@ function annotations1D(signals, optionsG){
     var height = options.height;
     var annotations=[];
     for (var i=0; i<signals.length; i++) {
-        var annotation={};
         var prediction=signals[i];
-        annotations.push(annotation);
-        annotation.line = options.line;
-        annotation._highlight=prediction._highlight;
-        annotation.type=options.type;
+        if(prediction.integral){
+            var annotation={};
 
-        if(!prediction.to||!prediction.from||prediction.to==prediction.from){
-            annotation.position=[{x:prediction.signal[0].delta-options.width, y:(options.line*height)+"px"},
-                {x:prediction.signal[0].delta+options.width, y:(options.line*height+3)+"px"}];
+            annotations.push(annotation);
+            annotation.line = options.line;
+            annotation._highlight=prediction._highlight;
+            annotation.type=options.type;
+
+            if(!prediction.to||!prediction.from||prediction.to==prediction.from){
+                annotation.position=[{x:prediction.signal[0].delta-options.width, y:(options.line*height)+"px"},
+                    {x:prediction.signal[0].delta+options.width, y:(options.line*height+3)+"px"}];
+            }
+            else{
+                annotation.position=[{x:prediction.to, y:(options.line*height)+"px"},
+                    {x:prediction.from, y:(options.line*height+3)+"px"}];
+            }
+
+            if(!options.noLabel&&prediction.integral){
+                annotation.label={
+                    text: prediction.integral.toFixed(options.toFixed),
+                    size: "11px",
+                    anchor: 'middle',
+                    color:options.labelColor,
+                    position: {x:(annotation.position[0].x+annotation.position[1].x)/2,
+                        y:((options.line+options.lineLabel)*height)+"px", dy: "5px"}
+                };
+            }
+
+
+            annotation.strokeColor=options.strokeColor;
+            annotation.strokeWidth=options.strokeWidth;
+            annotation.fillColor=options.fillColor;
+            annotation.info=prediction;
         }
-        else{
-            annotation.position=[{x:prediction.to, y:(options.line*height)+"px"},
-                {x:prediction.from, y:(options.line*height+3)+"px"}];
-        }
-
-        if(!options.noLabel&&prediction.integral){
-            annotation.label={
-                text: prediction.integral.toFixed(options.toFixed),
-                size: "11px",
-                anchor: 'middle',
-                color:options.labelColor,
-                position: {x:(annotation.position[0].x+annotation.position[1].x)/2,
-                    y:((options.line+options.lineLabel)*height)+"px", dy: "5px"}
-            };
-        }
-
-
-        annotation.strokeColor=options.strokeColor;
-        annotation.strokeWidth=options.strokeWidth;
-        annotation.fillColor=options.fillColor;
-        annotation.info=prediction;
     }
     return annotations;
 } 
