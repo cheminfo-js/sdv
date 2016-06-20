@@ -17369,6 +17369,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 	module.exports.range2Vector=function(ranges, opt){
+	    return module.exports.peak2Vector(module.exports.range2Peaks(ranges), opt);
+	}
+
+	module.exports.range2Peaks = function(ranges){
 	    var peaks = [];
 	    for(var i=0;i<ranges.length;i++){
 	        var range = ranges[i];
@@ -17376,8 +17380,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            peaks=peaks.concat(range.signal[j].peak);
 	        }
 	    }
-
-	    return module.exports.peak2Vector(peaks, opt);
+	    return peaks;
 	}
 
 	module.exports.toACS = function(spectrumIn, options){
