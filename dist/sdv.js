@@ -77,40 +77,38 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var annotations=[];
 	    for (var i=0; i<signals.length; i++) {
 	        var prediction=signals[i];
-	        if(prediction.integral){
-	            var annotation={};
+	        var annotation={};
 
-	            annotations.push(annotation);
-	            annotation.line = options.line;
-	            annotation._highlight=prediction._highlight;
-	            annotation.type=options.type;
+	        annotations.push(annotation);
+	        annotation.line = options.line;
+	        annotation._highlight=prediction._highlight;
+	        annotation.type=options.type;
 
-	            if(!prediction.to||!prediction.from||prediction.to==prediction.from){
-	                annotation.position=[{x:prediction.signal[0].delta-options.width, y:(options.line*height)+"px"},
-	                    {x:prediction.signal[0].delta+options.width, y:(options.line*height+3)+"px"}];
-	            }
-	            else{
-	                annotation.position=[{x:prediction.to, y:(options.line*height)+"px"},
-	                    {x:prediction.from, y:(options.line*height+3)+"px"}];
-	            }
-
-	            if(!options.noLabel&&prediction.integral){
-	                annotation.label={
-	                    text: prediction.integral.toFixed(options.toFixed),
-	                    size: "11px",
-	                    anchor: 'middle',
-	                    color:options.labelColor,
-	                    position: {x:(annotation.position[0].x+annotation.position[1].x)/2,
-	                        y:((options.line+options.lineLabel)*height)+"px", dy: "5px"}
-	                };
-	            }
-
-
-	            annotation.strokeColor=options.strokeColor;
-	            annotation.strokeWidth=options.strokeWidth;
-	            annotation.fillColor=options.fillColor;
-	            annotation.info=prediction;
+	        if(!prediction.to||!prediction.from||prediction.to==prediction.from){
+	            annotation.position=[{x:prediction.signal[0].delta-options.width, y:(options.line*height)+"px"},
+	                {x:prediction.signal[0].delta+options.width, y:(options.line*height+3)+"px"}];
 	        }
+	        else{
+	            annotation.position=[{x:prediction.to, y:(options.line*height)+"px"},
+	                {x:prediction.from, y:(options.line*height+3)+"px"}];
+	        }
+
+	        if(!options.noLabel && prediction.integral){
+	            annotation.label={
+	                text: prediction.integral.toFixed(options.toFixed),
+	                size: "11px",
+	                anchor: 'middle',
+	                color:options.labelColor,
+	                position: {x:(annotation.position[0].x+annotation.position[1].x)/2,
+	                    y:((options.line+options.lineLabel)*height)+"px", dy: "5px"}
+	            };
+	        }
+
+
+	        annotation.strokeColor=options.strokeColor;
+	        annotation.strokeWidth=options.strokeWidth;
+	        annotation.fillColor=options.fillColor;
+	        annotation.info=prediction;
 	    }
 	    return annotations;
 	} 
@@ -1341,17 +1339,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	    for (i = 0; i < length; i++)
 	        averageDeviations[i] = Math.abs(y[i] - mean);
 	    averageDeviations.sort(compareNumbers);
-	    if (length % 2 == 1) {
+	    if (length % 2 === 1) {
 	        stdev = averageDeviations[(length - 1) / 2] / 0.6745;
 	    } else {
 	        stdev = 0.5 * (averageDeviations[length / 2] + averageDeviations[length / 2 - 1]) / 0.6745;
 	    }
 
-	    return {mean, stdev};
+	    return {
+	        mean: mean,
+	        stdev: stdev
+	    };
 	};
 
 	exports.quartiles = function quartiles(values, alreadySorted) {
-	    if (typeof(alreadySorted) === 'undefined') alreadySorted = false;
+	    if (typeof (alreadySorted) === 'undefined') alreadySorted = false;
 	    if (!alreadySorted) {
 	        values = [].concat(values).sort(compareNumbers);
 	    }
@@ -1369,7 +1370,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 	exports.pooledVariance = function pooledVariance(samples, unbiased) {
-	    if (typeof(unbiased) === 'undefined') unbiased = true;
+	    if (typeof (unbiased) === 'undefined') unbiased = true;
 	    var sum = 0;
 	    var length = 0, l = samples.length;
 	    for (var i = 0; i < l; i++) {
@@ -1419,12 +1420,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 	exports.covariance = function covariance(vector1, vector2, unbiased) {
-	    if (typeof(unbiased) === 'undefined') unbiased = true;
+	    if (typeof (unbiased) === 'undefined') unbiased = true;
 	    var mean1 = exports.mean(vector1);
 	    var mean2 = exports.mean(vector2);
 
 	    if (vector1.length !== vector2.length)
-	        throw "Vectors do not have the same dimensions";
+	        throw 'Vectors do not have the same dimensions';
 
 	    var cov = 0, l = vector1.length;
 	    for (var i = 0; i < l; i++) {
@@ -1440,7 +1441,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 	exports.skewness = function skewness(values, unbiased) {
-	    if (typeof(unbiased) === 'undefined') unbiased = true;
+	    if (typeof (unbiased) === 'undefined') unbiased = true;
 	    var theMean = exports.mean(values);
 
 	    var s2 = 0, s3 = 0, l = values.length;
@@ -1457,14 +1458,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var a = Math.sqrt(l * (l - 1));
 	        var b = l - 2;
 	        return (a / b) * g;
-	    }
-	    else {
+	    } else {
 	        return g;
 	    }
 	};
 
 	exports.kurtosis = function kurtosis(values, unbiased) {
-	    if (typeof(unbiased) === 'undefined') unbiased = true;
+	    if (typeof (unbiased) === 'undefined') unbiased = true;
 	    var theMean = exports.mean(values);
 	    var n = values.length, s2 = 0, s4 = 0;
 
@@ -1483,14 +1483,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var c = ((n - 1) * (n - 1)) / ((n - 2) * (n - 3));
 
 	        return a * b - 3 * c;
-	    }
-	    else {
+	    } else {
 	        return m4 / (m2 * m2) - 3;
 	    }
 	};
 
 	exports.entropy = function entropy(values, eps) {
-	    if (typeof(eps) === 'undefined') eps = 0;
+	    if (typeof (eps) === 'undefined') eps = 0;
 	    var sum = 0, l = values.length;
 	    for (var i = 0; i < l; i++)
 	        sum += values[i] * Math.log(values[i] + eps);
@@ -1526,7 +1525,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 	exports.center = function center(values, inPlace) {
-	    if (typeof(inPlace) === 'undefined') inPlace = false;
+	    if (typeof (inPlace) === 'undefined') inPlace = false;
 
 	    var result = values;
 	    if (!inPlace)
@@ -1538,8 +1537,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 	exports.standardize = function standardize(values, standardDev, inPlace) {
-	    if (typeof(standardDev) === 'undefined') standardDev = exports.standardDeviation(values);
-	    if (typeof(inPlace) === 'undefined') inPlace = false;
+	    if (typeof (standardDev) === 'undefined') standardDev = exports.standardDeviation(values);
+	    if (typeof (inPlace) === 'undefined') inPlace = false;
 	    var l = values.length;
 	    var result = inPlace ? values : new Array(l);
 	    for (var i = 0; i < l; i++)
@@ -1598,11 +1597,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	            if (matrix[i][j] > max) max = matrix[i][j];
 	        }
 	    }
-	    return {min, max};
+	    return {
+	        min:min,
+	        max:max
+	    };
 	};
 
 	exports.entropy = function entropy(matrix, eps) {
-	    if (typeof(eps) === 'undefined') {
+	    if (typeof (eps) === 'undefined') {
 	        eps = 0;
 	    }
 	    var sum = 0,
@@ -1617,7 +1619,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 	exports.mean = function mean(matrix, dimension) {
-	    if (typeof(dimension) === 'undefined') {
+	    if (typeof (dimension) === 'undefined') {
 	        dimension = 0;
 	    }
 	    var rows = matrix.length,
@@ -1659,6 +1661,80 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return theMean;
 	};
 
+	exports.sum = function sum(matrix, dimension) {
+	    if (typeof (dimension) === 'undefined') {
+	        dimension = 0;
+	    }
+	    var rows = matrix.length,
+	        cols = matrix[0].length,
+	        theSum, i, j;
+
+	    if (dimension === -1) {
+	        theSum = [0];
+	        for (i = 0; i < rows; i++) {
+	            for (j = 0; j < cols; j++) {
+	                theSum[0] += matrix[i][j];
+	            }
+	        }
+	    } else if (dimension === 0) {
+	        theSum = new Array(cols);
+	        for (j = 0; j < cols; j++) {
+	            theSum[j] = 0;
+	            for (i = 0; i < rows; i++) {
+	                theSum[j] += matrix[i][j];
+	            }
+	        }
+	    } else if (dimension === 1) {
+	        theSum = new Array(rows);
+	        for (j = 0; j < rows; j++) {
+	            theSum[j] = 0;
+	            for (i = 0; i < cols; i++) {
+	                theSum[j] += matrix[j][i];
+	            }
+	        }
+	    } else {
+	        throw new Error('Invalid dimension');
+	    }
+	    return theSum;
+	};
+
+	exports.product = function product(matrix, dimension) {
+	    if (typeof (dimension) === 'undefined') {
+	        dimension = 0;
+	    }
+	    var rows = matrix.length,
+	        cols = matrix[0].length,
+	        theProduct, i, j;
+
+	    if (dimension === -1) {
+	        theProduct = [1];
+	        for (i = 0; i < rows; i++) {
+	            for (j = 0; j < cols; j++) {
+	                theProduct[0] *= matrix[i][j];
+	            }
+	        }
+	    } else if (dimension === 0) {
+	        theProduct = new Array(cols);
+	        for (j = 0; j < cols; j++) {
+	            theProduct[j] = 1;
+	            for (i = 0; i < rows; i++) {
+	                theProduct[j] *= matrix[i][j];
+	            }
+	        }
+	    } else if (dimension === 1) {
+	        theProduct = new Array(rows);
+	        for (j = 0; j < rows; j++) {
+	            theProduct[j] = 1;
+	            for (i = 0; i < cols; i++) {
+	                theProduct[j] *= matrix[j][i];
+	            }
+	        }
+	    } else {
+	        throw new Error('Invalid dimension');
+	    }
+	    return theProduct;
+	};
+
 	exports.standardDeviation = function standardDeviation(matrix, means, unbiased) {
 	    var vari = exports.variance(matrix, means, unbiased), l = vari.length;
 	    for (var i = 0; i < l; i++) {
@@ -1668,7 +1744,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 	exports.variance = function variance(matrix, means, unbiased) {
-	    if (typeof(unbiased) === 'undefined') {
+	    if (typeof (unbiased) === 'undefined') {
 	        unbiased = true;
 	    }
 	    means = means || exports.mean(matrix);
@@ -1751,7 +1827,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 	exports.skewness = function skewness(matrix, unbiased) {
-	    if (typeof(unbiased) === 'undefined') unbiased = true;
+	    if (typeof (unbiased) === 'undefined') unbiased = true;
 	    var means = exports.mean(matrix);
 	    var n = matrix.length, l = means.length;
 	    var skew = new Array(l);
@@ -1780,7 +1856,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 	exports.kurtosis = function kurtosis(matrix, unbiased) {
-	    if (typeof(unbiased) === 'undefined') unbiased = true;
+	    if (typeof (unbiased) === 'undefined') unbiased = true;
 	    var means = exports.mean(matrix);
 	    var n = matrix.length, m = matrix[0].length;
 	    var kurt = new Array(m);
@@ -1810,7 +1886,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	exports.standardError = function standardError(matrix) {
 	    var samples = matrix.length;
-	    var standardDeviations = exports.standardDeviation(matrix)
+	    var standardDeviations = exports.standardDeviation(matrix);
 	    var l = standardDeviations.length;
 	    var standardErrors = new Array(l);
 	    var sqrtN = Math.sqrt(samples);
@@ -1826,10 +1902,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 	exports.scatter = function scatter(matrix, divisor, dimension) {
-	    if (typeof(dimension) === 'undefined') {
+	    if (typeof (dimension) === 'undefined') {
 	        dimension = 0;
 	    }
-	    if (typeof(divisor) === 'undefined') {
+	    if (typeof (divisor) === 'undefined') {
 	        if (dimension === 0) {
 	            divisor = matrix.length - 1;
 	        } else if (dimension === 1) {
@@ -1911,7 +1987,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	exports.zScores = function zScores(matrix, means, standardDeviations) {
 	    means = means || exports.mean(matrix);
-	    if (typeof(standardDeviations) === 'undefined') standardDeviations = exports.standardDeviation(matrix, true, means);
+	    if (typeof (standardDeviations) === 'undefined') standardDeviations = exports.standardDeviation(matrix, true, means);
 	    return exports.standardize(exports.center(matrix, means, false), standardDeviations, true);
 	};
 
@@ -1938,7 +2014,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 	exports.standardize = function standardize(matrix, standardDeviations, inPlace) {
-	    if (typeof(standardDeviations) === 'undefined') standardDeviations = exports.standardDeviation(matrix);
+	    if (typeof (standardDeviations) === 'undefined') standardDeviations = exports.standardDeviation(matrix);
 	    var result = matrix,
 	        l = matrix.length,
 	        i, j, jj;
@@ -1989,7 +2065,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 	exports.weightedMean = function weightedMean(matrix, weights, dimension) {
-	    if (typeof(dimension) === 'undefined') {
+	    if (typeof (dimension) === 'undefined') {
 	        dimension = 0;
 	    }
 	    var rows = matrix.length;
@@ -2049,7 +2125,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.weightedScatter = function weightedScatter(matrix, weights, means, factor, dimension) {
 	    dimension = dimension || 0;
 	    means = means || exports.weightedMean(matrix, weights, dimension);
-	    if (typeof(factor) === 'undefined') {
+	    if (typeof (factor) === 'undefined') {
 	        factor = 1;
 	    }
 	    var rows = matrix.length;
@@ -2629,13 +2705,14 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	/**
 	 * Performs a binary search of value in array
-	 * @param array - Array in which value will be searched. It must be sorted.
-	 * @param value - Value to search in array
+	 * @param {number[]} array - Array in which value will be searched. It must be sorted.
+	 * @param {number} value - Value to search in array
 	 * @return {number} If value is found, returns its index in array. Otherwise, returns a negative number indicating where the value should be inserted: -(index + 1)
 	 */
-	function binarySearch(array, value) {
-	    var low = 0;
-	    var high = array.length - 1;
+	function binarySearch(array, value, options) {
+	    options = options || {};
+	    var low = options.from || 0;
+	    var high = options.to || array.length - 1;
 
 	    while (low <= high) {
 	        var mid = (low + high) >>> 1;
@@ -3094,9 +3171,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	    }
 
+	    function getMedian(data) {
+	        data = data.sort(compareNumbers);
+	        var l = data.length;
+	        return data[Math.floor(l / 2)];
+	    }
+
+	    function compareNumbers(a, b) {
+	        return a - b;
+	    }
 
 	    function convertTo3DZ(spectra) {
-	        var noise = 0;
 	        var minZ = spectra[0].data[0][0];
 	        var maxZ = minZ;
 	        var ySize = spectra.length;
@@ -3110,9 +3195,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	                z[i][j] = value;
 	                if (value < minZ) minZ = value;
 	                if (value > maxZ) maxZ = value;
-	                if (i !== 0 && j !== 0) {
-	                    noise += Math.abs(value - z[i][j - 1]) + Math.abs(value - z[i - 1][j]);
-	                }
 	            }
 	        }
 	        return {
@@ -3123,7 +3205,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            maxY: spectra[ySize - 1].pageValue,
 	            minZ: minZ,
 	            maxZ: maxZ,
-	            noise: noise / ((ySize - 1) * (xSize - 1) * 2)
+	            noise: getMedian(z[0].map(Math.abs))
 	        };
 
 	    }
@@ -4747,7 +4829,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    integralFn:0,
 	    optimize:true,
 	    idPrefix:"",
-	    format:"old"
+	    format:"old",
+	    frequencyCluster:16
 	};
 
 
@@ -4778,7 +4861,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        peakList = GSD.post.optimizePeaks(peakList,data[0],data[1],gsdOptions.nL,gsdOptions.functionType);
 
 	    peakList = clearList(peakList, noiseLevel);
-	    var signals = detectSignals(peakList, spectrum, options.nH, options.integralFn);
+	    var signals = detectSignals(peakList, spectrum, options.nH, options.integralFn, options.frequencyCluster);
 
 	    //Remove all the signals with small integral
 	    if(options.clean||false){
@@ -4821,7 +4904,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    var peaks1 = [];
 	                    for(var j=peaksO.length-1;j>=0;j--)
 	                        peaks1.push(peaksO[j]);
-	                    var newSignals = detectSignals(peaks1, spectrum, nHi, options.integralFn);
+	                    var newSignals = detectSignals(peaks1, spectrum, nHi, options.integralFn, options.frequencyCluster);
 
 	                    for(j=0;j<newSignals.length;j++)
 	                        signals.push(newSignals[j]);
@@ -5052,14 +5135,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	 "peaks":[{"intensity":60066147,"x":3.42752}]
 	 }
 	 */
-	function detectSignals(peakList, spectrum, nH, integralType){
+	function detectSignals(peakList, spectrum, nH, integralType, frequencyCluster){
 
 	    var frequency = spectrum.observeFrequencyX();
 	    var signals = [];
 	    var signal1D = {};
 	    var prevPeak = {x:100000,y:0,width:0};
 	    var peaks=null;
-	    var rangeX = 16/frequency;//Peaks withing this range are considered to belongs to the same signal1D
+	    var rangeX = frequencyCluster / frequency; //Peaks withing this range are considered to belongs to the same signal1D
 	    var spectrumIntegral = 0;
 	    var cs,sum, i,j;
 	    var dx = (spectrum.getX(1)-spectrum.getX(0))>0?1:-1;
@@ -16532,7 +16615,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	'use strict';
 
 	var PeakOptimizer = __webpack_require__(61);
-	var SimpleClustering =  __webpack_require__(62);
+	var simpleClustering =  __webpack_require__(62);
 	var matrixPeakFinders =  __webpack_require__(63);
 	var FFTUtils = __webpack_require__(49).FFTUtils;
 
@@ -16639,7 +16722,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	    }
 
-	    var clusters = SimpleClustering.fullClusterGenerator(connectivity);
+	    var clusters = simpleClustering(connectivity);
 
 	    var signals = [];
 	    if (peaks != null) {
@@ -16996,72 +17079,114 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 62 */
 /***/ function(module, exports) {
 
+	/**
+	 * Created by acastillo on 8/8/16.
+	 */
 	'use strict';
 
-	module.exports.fullClusterGenerator = function fullClusterGenerator(conMat) {
-			if(typeof conMat[0] === "number"){
-				return fullClusterGeneratorVector(conMat);
-			}
-			else{
-				if(typeof conMat[0] === "array"){
-					var nRows = conMat.length;
-					var conn = new Array(nRows*(nRows-1)/2);
-					var index = 0;
-					for(var i=0;i<nRows-1;i++){
-						for(var j=i+1;j<nRows;j++){
-							conn[index++]= conMat[i][j];
-						}
-					}
-					return fullClusterGeneratorVector(conn);
-				}
-			}
-		}
+	const defOptions = {
+	    threshold:0,
+	    out:"assignment"
+	};
+	//TODO Consider a matrix of distances too
+	module.exports = function fullClusterGenerator(conMat, opt) {
+	    const options = Object.assign({}, defOptions, opt);
+	    var clList, i, j, k;
+	    if(typeof conMat[0] === "number"){
+	        clList = fullClusterGeneratorVector(conMat);
+	    }
+	    else{
+	        if(typeof conMat[0] === "object"){
+	            var nRows = conMat.length;
+	            var conn = new Array(nRows*(nRows+1)/2);
+	            var index = 0;
+	            for(var i=0;i<nRows;i++){
+	                for(var j=i;j<nRows;j++){
+	                    if(conMat[i][j]>options.threshold)
+	                        conn[index++]= 1;
+	                    else
+	                        conn[index++]= 0;
+	                }
+	            }
+	            clList = fullClusterGeneratorVector(conn);
+	        }
+	    }
+	    if (options.out === "indexes" || options.out === "values") {
+	        var result = new Array(clList.length);
+	        for(i=0;i<clList.length;i++){
+	            result[i] = [];
+	            for(j=0;j<clList[i].length;j++){
+	                if(clList[i][j] != 0){
+	                    result[i].push(j);
+	                }
+	            }
+	        }
+	        if (options.out === "values") {
+	            var resultAsMatrix = new Array(result.length);
+	            for (i = 0; i<result.length;i++){
+	                resultAsMatrix[i]=new Array(result[i].length);
+	                for(j = 0; j < result[i].length; j++){
+	                    resultAsMatrix[i][j]=new Array(result[i].length);
+	                    for(k = 0; k < result[i].length; k++){
+	                        resultAsMatrix[i][j][k]=conMat[result[i][j]][result[i][k]];
+	                    }
+	                }
+	            }
+	            return resultAsMatrix;
+	        }
+	        else{
+	            return result;
+	        }
+	    }
+
+	    return clList;
+
+	}
 
 	function fullClusterGeneratorVector(conn){
-		var nRows = Math.sqrt(conn.length*2+0.25)-0.5;
-		//console.log("nRows: "+nRows+" - "+conn.length);
-		var clusterList = [];
-		var available = new Array(nRows);
-		var remaining = nRows, i=0;
-		var cluster = [];
-		//Mark all the elements as available
-		for(i=nRows-1;i>=0;i--){
-			available[i]=1;
-		}
-		var nextAv=-1;
-		var toInclude = [];
-		while(remaining>0){
-			if(toInclude.length===0){
-				//If there is no more elements to include. Start a new cluster
-				cluster = new Array(nRows);
-				for(i=nRows-1;i>=0;i--)
-					cluster[i]=0;
-				clusterList.push(cluster);
-				for(nextAv = nRows-1;available[nextAv]==0;nextAv--){};
-			}
-			else{
-				nextAv=toInclude.splice(0,1);
-			}
-			cluster[nextAv]=1;
-			available[nextAv]=0;
-			remaining--;
-			//Copy the next available row
-			var row = new Array(nRows);
-			for(i=nRows-1;i>=0;i--){
-				var c=Math.max(nextAv,i);
-				var r=Math.min(nextAv,i);
-				//The element in the conn matrix
-				//console.log("index: "+r*(2*nRows-r-1)/2+c)
-				row[i]=conn[r*(2*nRows-r-1)/2+c];
-				//There is new elements to include in this row?
-				//Then, include it to the current cluster
-				if(row[i]==1&&available[i]==1&&cluster[i]==0){
-					toInclude.push(i);
-					cluster[i]=1;
-				}
-			}
-		}
-		return clusterList;
+	    var nRows = Math.sqrt(conn.length*2+0.25)-0.5;
+	    var clusterList = [];
+	    var available = new Array(nRows);
+	    var remaining = nRows, i=0;
+	    var cluster = [];
+	    //Mark all the elements as available
+	    for(i=nRows-1;i>=0;i--){
+	        available[i]=1;
+	    }
+	    var nextAv=-1;
+	    var toInclude = [];
+	    while(remaining>0){
+	        if(toInclude.length===0){
+	            //If there is no more elements to include. Start a new cluster
+	            cluster = new Array(nRows);
+	            for(i = 0;i < nRows ;i++)
+	                cluster[i]=0;
+	            clusterList.push(cluster);
+	            for(nextAv = 0;available[nextAv]==0;nextAv++){};
+	        }
+	        else{
+	            nextAv=toInclude.splice(0,1);
+	        }
+	        cluster[nextAv]=1;
+	        available[nextAv]=0;
+	        remaining--;
+	        //Copy the next available row
+	        var row = new Array(nRows);
+	        for( i = 0;i < nRows;i++){
+	            var c=Math.max(nextAv,i);
+	            var r=Math.min(nextAv,i);
+	            //The element in the conn matrix
+	            //console.log("index: "+r*(2*nRows-r-1)/2+c)
+	            row[i]=conn[r*(2*nRows-r-1)/2+c];
+	            //There is new elements to include in this row?
+	            //Then, include it to the current cluster
+	            if(row[i]==1&&available[i]==1&&cluster[i]==0){
+	                toInclude.push(i);
+	                cluster[i]=1;
+	            }
+	        }
+	    }
+	    return clusterList;
 	}
 
 /***/ },
@@ -17072,7 +17197,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/**
 	 * Created by acastillo on 7/7/16.
 	 */
-	var StatArray = __webpack_require__(5);
+	var StatArray = __webpack_require__(4).array;
 	var convolution = __webpack_require__(64);
 	var labeling = __webpack_require__(68);
 
@@ -18174,6 +18299,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	var spectro="";
 	var rangeForMultiplet=false;
 
+	module.exports = __webpack_require__(72);
+
+	module.exports.update = function(ranges){
+	    for (var i=0; i<ranges.length; i++){
+	        var range = ranges[i];
+	        for (var j=0; j<range.signal.length; j++){
+	            var signal = range.signal[j];
+	            if (signal.j && ! signal.multiplicity) {
+	                signal.multiplicity = "";
+	                for (var k=0; k<signal.j.length;k++){
+	                    signal.multiplicity+=signal.j[k].multiplicity;
+	                }
+	            }
+	        }
+	    }
+
+	    return ranges;
+	}
+
 	module.exports.nmrJ = function(Js, options){
 	    var Jstring = "";
 	    var opt = Object.assign({},{separator:", ", nbDecimal:2}, options);
@@ -18773,6 +18917,83 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if ((parenthesis.length>0) && (! parenthesis.match(", $"))) parenthesis+=", ";
 	}
 
+
+/***/ },
+/* 72 */
+/***/ function(module, exports) {
+
+	/**
+	 * Created by acastillo on 8/17/16.
+	 */
+	'use strict';
+
+	//lineWidth in Hz frequency in MHz
+	const defaultOptions = {lineWidth:1, frequency: 400};
+
+	module.exports.prediction2Ranges = function(predictions, opt){
+	    const options = Object.assign({}, defaultOptions, opt);
+	    //1. Collapse all the equivalent predictions
+	    const nPredictions = predictions.length;
+	    const ids = new Array(nPredictions);
+	    var i, j, diaIDs, prediction, width, center, jc;
+	    for(i = 0 ; i < nPredictions; i++) {
+	        if(!ids[predictions[i].diaIDs[0]]) {
+	            ids[predictions[i].diaIDs[0]] = [i]
+	        }
+	        else{
+	            ids[predictions[i].diaIDs[0]].push(i);
+	        }
+	    }
+	    const idsKeys = Object.keys(ids);
+	    const result = new Array(idsKeys.length);
+
+	    for(i = 0; i < idsKeys.length; i++) {
+	        diaIDs = ids[idsKeys[i]];
+	        prediction = predictions[diaIDs[0]];
+	        width = 0;
+	        jc = prediction.j;
+	        if(jc){
+	            for(j = 0; j < jc.length; j++) {
+	                width+=jc[j].coupling;
+	            }
+	        }
+
+	        width+= 2*options.lineWidth;//Add 2 times the spectral lineWidth
+
+	        width/=options.frequency;
+
+	        result[i] = {from: prediction.delta-width,
+	                    to:prediction.delta+width,
+	                    integral:1,
+	                    signal:[ predictions[diaIDs[0]] ]};
+	        for(j = 1; j < diaIDs.length; j++) {
+	            result[i].signal.push(predictions[diaIDs[j]]);
+	            result[i].integral++;
+	        }
+	    }
+	    //2. Merge the overlaping ranges
+	    for(i  =  0; i < result.length; i++) {
+	        result[i]._highlight = result[i].signal[0].diaIDs;
+	        center = (result[i].from + result[i].to)/2;
+	        width = Math.abs(result[i].from - result[i].to);
+	        for(j  = result.length - 1; j > i; j--) {
+	            //Does it overlap?
+	            if(Math.abs(center - (result[j].from + result[j].to)/2)
+	                <= Math.abs(width + Math.abs(result[j].from - result[j].to))/2){
+	                result[i].from = Math.min(result[i].from, result[j].from);
+	                result[i].to = Math.max(result[i].to, result[j].to);
+	                result[i].integral = result[i].integral + result[j].integral;
+	                result[i]._highlight.push(result[j].signal[0].diaIDs[0]);
+	                result.splice(j,1);
+	                j = result.length - 1;
+	                center = (result[i].from + result[i].to)/2;
+	                width = Math.abs(result[i].from - result[i].to);
+	            }
+	        }
+	    }
+
+	    return result;
+	}
 
 /***/ }
 /******/ ])
