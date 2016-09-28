@@ -82,6 +82,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        annotations.push(annotation);
 	        annotation.line = options.line;
 	        annotation._highlight=prediction._highlight;
+	        if(!annotation._highlight || annotation._highlight.length === 0){
+	            annotation._highlight = prediction.signalID;
+	        }
 	        annotation.type=options.type;
 
 	        if(!prediction.to||!prediction.from||prediction.to==prediction.from){
@@ -1014,6 +1017,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	        area+= this.getY(i);
 	    }
 	    return area*Math.abs(this.getDeltaX());
+	},
+
+	SD.prototype.updateIntegrals = function(ranges, options){
+	    var sum = 0;
+	    var that = this;
+	    ranges.forEach(function (range, index) {
+	        range.integral = that.getArea(range.from, range.to);
+	        sum += range.integral;
+	    });
+	    if(options.nH){
+	        var factor = options.nH / sum;
+	        ranges.forEach(function (range, index) {
+	            range.integral *= factor;
+	        });
+	    }
 	},
 
 	/**
