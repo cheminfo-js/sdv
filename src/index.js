@@ -26,6 +26,9 @@ function annotations1D(signals, optionsG){
         annotations.push(annotation);
         annotation.line = options.line;
         annotation._highlight=prediction._highlight;
+        if(!annotation._highlight || annotation._highlight.length === 0){
+            annotation._highlight = prediction.signalID;
+        }
         annotation.type=options.type;
 
         if(!prediction.to||!prediction.from||prediction.to==prediction.from){
