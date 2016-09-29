@@ -83,8 +83,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        annotation.line = options.line;
 	        annotation._highlight=prediction._highlight;
 	        if(!annotation._highlight || annotation._highlight.length === 0){
-	            annotation._highlight = prediction.signalID;
+	            annotation._highlight = [prediction.signalID];
+	            prediction.signal.forEach(function(signal){
+	                annotation._highlight.push(...signal.diaID);
+	            })
 	        }
+
 	        annotation.type=options.type;
 
 	        if(!prediction.to||!prediction.from||prediction.to==prediction.from){
@@ -124,6 +128,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var annotation={};
 	        annotation.type=options.type;
 	        annotation._highlight=signal._highlight;//["cosy"+k];
+	        if(!annotation._highlight || annotation._highlight.length === 0){
+	            annotation._highlight = [signal.signalID];
+	        }
 	        annotation.position = [{x:signal.fromTo[0].from-0.01, y:signal.fromTo[1].from-0.01, dx:options.width, dy:options.height},
 	            {x:signal.fromTo[0].to+0.01,y:signal.fromTo[1].to+0.01}];
 	        annotation.fillColor=options.fillColor;
