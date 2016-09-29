@@ -81,13 +81,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        annotations.push(annotation);
 	        annotation.line = options.line;
-	        annotation._highlight=prediction._highlight;
+	        annotation._highlight = prediction._highlight;
 	        if(!annotation._highlight || annotation._highlight.length === 0){
 	            annotation._highlight = [prediction.signalID];
 	            prediction.signal.forEach(function(signal){
 	                annotation._highlight.push(...signal.diaID);
-	            })
+	            });
 	        }
+
+	        prediction._highlight = annotation._highlight;
 
 	        annotation.type=options.type;
 
@@ -131,6 +133,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if(!annotation._highlight || annotation._highlight.length === 0){
 	            annotation._highlight = [signal.signalID];
 	        }
+	        signal._highlight = annotation._highlight;
+
 	        annotation.position = [{x:signal.fromTo[0].from-0.01, y:signal.fromTo[1].from-0.01, dx:options.width, dy:options.height},
 	            {x:signal.fromTo[0].to+0.01,y:signal.fromTo[1].to+0.01}];
 	        annotation.fillColor=options.fillColor;
